@@ -1,0 +1,22 @@
+{
+  "name": "ChartER",
+  "version": "0.1.0",
+  "summary": "A short description of ChartER.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/eastroot1590@gmail.com/ChartER",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "eastroot1590@gmail.com": "eastroot1590@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/eastroot1590@gmail.com/ChartER.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "ChartER/Classes/**/*"
+}

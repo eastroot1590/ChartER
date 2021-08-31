@@ -1,0 +1,16 @@
+PODS:
+  - ChartER (0.1.0)
+
+DEPENDENCIES:
+  - ChartER (from `../`)
+
+EXTERNAL SOURCES:
+  ChartER:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  ChartER: c96347a2db6e47f263d8fb60251875f151be13dd
+
+PODFILE CHECKSUM: ff1bc5331b49ff34b89ce8f778f68683e9b38ebf
+
+COCOAPODS: 1.10.2
