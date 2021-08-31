@@ -7,16 +7,14 @@
 
 import Foundation
 
-/// 차트 Path를 만들 수 있는 Builder
-class ChartERBuilder {
-    let chart: ChartERView
+open class ChartERBuilder {
+    var chart: ChartERView!
     
-    var lastPoint: CGPoint = .zero
+    /// 선, 바, 원 등 차트의 각 값을 표현하는 그래픽의 크기
+    var chartSize: CGFloat = 2
     
-    var curveRate: CGFloat = 0
-    
-    init(chart: ChartERView) {
-        self.chart = chart
+    public init() {
+        
     }
     
     func axis() -> CGPath {
@@ -75,34 +73,29 @@ class ChartERBuilder {
         return labels
     }
     
-    func buildPath(line linePath: UIBezierPath, point pointPath: UIBezierPath, at index: Int) {
+    func chartPath(at index: Int) -> CGPath {
+        UIBezierPath().cgPath
+    }
+    
+    func pointPath(at index: Int) -> CGPath {
+        let pointPath = UIBezierPath()
+        
         var x: CGFloat = chart.chartInset.left + chart.axisSize.width
         
         for offset in 0 ..< chart.visibleValuesCount {
             let point: CGPoint = CGPoint(x: x, y: getY(at: index + offset))
             
-            // line
-            if offset == 0 {
-                linePath.move(to: point)
-            } else {
-                // curve
-                let offset = (chart.spacing / 2) * (1 - curveRate)
-                linePath.addCurve(to: point, controlPoint1: CGPoint(x: lastPoint.x + offset, y: lastPoint.y), controlPoint2: CGPoint(x: point.x - offset, y: point.y))
-                // line
-//                linePath.addLine(to: point)
-            }
-            lastPoint = point
-            
-            // point
             let radius: CGFloat = 5
             pointPath.move(to: CGPoint(x: point.x + radius, y: point.y))
             pointPath.addArc(withCenter: point, radius: radius, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
             
             x += chart.spacing
         }
+        
+        return pointPath.cgPath
     }
     
-    private func getY(at index: Int) -> CGFloat {
+    func getY(at index: Int) -> CGFloat {
         let value = chart.series.values[index]
         let yOffset = (chart.maxValue - chart.minValue) != 0 ? (value - chart.minValue) / (chart.maxValue - chart.minValue) : 0
         

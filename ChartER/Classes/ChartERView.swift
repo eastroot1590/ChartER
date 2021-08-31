@@ -20,6 +20,16 @@ open class ChartERView: UIView {
     var visibleValuesCount: Int = 7
     /// 각 점들 사이의 최소 거리
     var minimumSpacing: CGFloat = 20
+    /// 포인트 점 보기 감추기
+    public var showsPointDots: Bool = true {
+        didSet {
+            if showsPointDots {
+                layer.addSublayer(pointLayer)
+            } else {
+                pointLayer.removeFromSuperlayer()
+            }
+        }
+    }
     
     // 데이터
     /// 이름
@@ -75,10 +85,20 @@ open class ChartERView: UIView {
     private var oldTouch: CGPoint = .zero
     
     // 유틸리티
-    var builder: ChartERBuilder!
+    public var builder: ChartERBuilder! {
+        didSet {
+            oldValue?.chart = nil
+            builder?.chart = self
+            
+            chartLayer.lineWidth = builder.chartSize
+        }
+    }
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        // default builder
+        builder = LineChartERBuilder()
         
         // 축
         axisLayer.fillColor = nil
@@ -89,7 +109,7 @@ open class ChartERView: UIView {
         // 차트
         chartLayer.fillColor = nil
         chartLayer.strokeColor = mainColor
-        chartLayer.lineWidth = 2
+        chartLayer.lineWidth = builder.chartSize
         layer.addSublayer(chartLayer)
         
         // 점
@@ -98,7 +118,6 @@ open class ChartERView: UIView {
         pointLayer.lineWidth = 2
         layer.addSublayer(pointLayer)
         
-        builder = ChartERBuilder(chart: self)
         
         let recognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
         addGestureRecognizer(recognizer)
@@ -173,45 +192,43 @@ open class ChartERView: UIView {
     }
     
     private func updateChart(animated: Bool = true) {
-        let linePath = UIBezierPath()
-        let pointPath = UIBezierPath()
-        
-        builder.buildPath(line: linePath, point: pointPath, at: currentIndex)
+        let linePath = builder.chartPath(at: currentIndex)
+        let pointPath = builder.pointPath(at: currentIndex)
         
         if animated {
             let chartAnimation = CABasicAnimation(keyPath: "path")
-            chartAnimation.fromValue = chartLayer.path ?? linePath.cgPath
-            chartAnimation.toValue = linePath.cgPath
+            chartAnimation.fromValue = chartLayer.path ?? linePath
+            chartAnimation.toValue = linePath
             chartAnimation.duration = animateDuration
             chartAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
             chartLayer.removeAnimation(forKey: "path")
             chartLayer.add(chartAnimation, forKey: "path")
             
             let pointAnimation = CABasicAnimation(keyPath: "path")
-            pointAnimation.fromValue = pointLayer.path ?? pointPath.cgPath
-            pointAnimation.toValue = pointPath.cgPath
+            pointAnimation.fromValue = pointLayer.path ?? pointPath
+            pointAnimation.toValue = pointPath
             pointAnimation.duration = animateDuration
             pointAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
             pointLayer.removeAnimation(forKey: "path")
             pointLayer.add(pointAnimation, forKey: "path")
         }
         
-        chartLayer.path = linePath.cgPath
-        pointLayer.path = pointPath.cgPath
+        chartLayer.path = linePath
+        pointLayer.path = pointPath
     }
     
     private func resetAxis() {
         // axis
-        axisLayer.path = builder.axis()
+        axisLayer.path = builder?.axis()
         
         // x axis label
         xAxisLabels.forEach { $0.removeFromSuperlayer() }
-        xAxisLabels = builder.xAxisLabels()
+        xAxisLabels = builder?.xAxisLabels() ?? []
         xAxisLabels.forEach { self.layer.addSublayer($0) }
         
         // y axis label
         yAxisLabels.forEach { $0.removeFromSuperlayer() }
-        yAxisLabels = builder.yAxisLabels()
+        yAxisLabels = builder?.yAxisLabels() ?? []
         yAxisLabels.forEach { self.layer.addSublayer($0) }
     }
     
