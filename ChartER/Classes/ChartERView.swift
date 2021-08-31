@@ -21,12 +21,12 @@ open class ChartERView: UIView {
     /// 각 점들 사이의 최소 거리
     var minimumSpacing: CGFloat = 20
     /// 포인트 점 보기 감추기
-    public var showsPointDots: Bool = true {
+    public var showsMarker: Bool = true {
         didSet {
-            if showsPointDots {
-                layer.addSublayer(pointLayer)
+            if showsMarker {
+                layer.addSublayer(markerLayer)
             } else {
-                pointLayer.removeFromSuperlayer()
+                markerLayer.removeFromSuperlayer()
             }
         }
     }
@@ -71,9 +71,11 @@ open class ChartERView: UIView {
     
     // 레이어
     /// 원본 차트 레이어
-    let chartLayer: CAShapeLayer = CAShapeLayer()
+    let seriesLayer: CAShapeLayer = CAShapeLayer()
+    /// 차트 라벨
+    var seriesLabels: [CATextLayer] = []
     /// 차트의 각 값을 특정 모양으로 찍는 레이어
-    let pointLayer: CAShapeLayer = CAShapeLayer()
+    let markerLayer: CAShapeLayer = CAShapeLayer()
     /// 축 레이어
     let axisLayer: CAShapeLayer = CAShapeLayer()
     /// x축 라벨
@@ -90,7 +92,7 @@ open class ChartERView: UIView {
             oldValue?.chart = nil
             builder?.chart = self
             
-            chartLayer.lineWidth = builder.chartSize
+            seriesLayer.lineWidth = builder.chartSize
         }
     }
     
@@ -107,17 +109,16 @@ open class ChartERView: UIView {
         layer.addSublayer(axisLayer)
         
         // 차트
-        chartLayer.fillColor = nil
-        chartLayer.strokeColor = mainColor
-        chartLayer.lineWidth = builder.chartSize
-        layer.addSublayer(chartLayer)
+        seriesLayer.fillColor = nil
+        seriesLayer.strokeColor = mainColor
+        seriesLayer.lineWidth = builder.chartSize
+        layer.addSublayer(seriesLayer)
         
         // 점
-        pointLayer.fillColor = subColor
-        pointLayer.strokeColor = CGColor(red: 1, green: 1, blue: 1, alpha: 1)
-        pointLayer.lineWidth = 2
-        layer.addSublayer(pointLayer)
-        
+        markerLayer.fillColor = subColor
+        markerLayer.strokeColor = backgroundColor?.cgColor
+        markerLayer.lineWidth = 2
+        layer.addSublayer(markerLayer)
         
         let recognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
         addGestureRecognizer(recognizer)
@@ -130,7 +131,7 @@ open class ChartERView: UIView {
     open override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: layer)
         
-        chartLayer.frame = bounds
+        seriesLayer.frame = bounds
         axisLayer.frame = bounds
         
         // update appearance
@@ -195,26 +196,32 @@ open class ChartERView: UIView {
         let linePath = builder.chartPath(at: currentIndex)
         let pointPath = builder.pointPath(at: currentIndex)
         
+        if seriesLabels.isEmpty {
+            seriesLabels = builder.seriesLabels()
+            seriesLabels.forEach { self.layer.addSublayer($0) }
+        }
+        builder.updateSeriesLabel(seriesLabels, at: currentIndex, animated: animated)
+        
         if animated {
             let chartAnimation = CABasicAnimation(keyPath: "path")
-            chartAnimation.fromValue = chartLayer.path ?? linePath
+            chartAnimation.fromValue = seriesLayer.path ?? linePath
             chartAnimation.toValue = linePath
             chartAnimation.duration = animateDuration
             chartAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
-            chartLayer.removeAnimation(forKey: "path")
-            chartLayer.add(chartAnimation, forKey: "path")
+            seriesLayer.removeAnimation(forKey: "path")
+            seriesLayer.add(chartAnimation, forKey: "path")
             
             let pointAnimation = CABasicAnimation(keyPath: "path")
-            pointAnimation.fromValue = pointLayer.path ?? pointPath
+            pointAnimation.fromValue = markerLayer.path ?? pointPath
             pointAnimation.toValue = pointPath
             pointAnimation.duration = animateDuration
             pointAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
-            pointLayer.removeAnimation(forKey: "path")
-            pointLayer.add(pointAnimation, forKey: "path")
+            markerLayer.removeAnimation(forKey: "path")
+            markerLayer.add(pointAnimation, forKey: "path")
         }
         
-        chartLayer.path = linePath
-        pointLayer.path = pointPath
+        seriesLayer.path = linePath
+        markerLayer.path = pointPath
     }
     
     private func resetAxis() {

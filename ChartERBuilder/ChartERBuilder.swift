@@ -73,6 +73,56 @@ open class ChartERBuilder {
         return labels
     }
     
+    func seriesLabels() -> [CATextLayer] {
+        var labels: [CATextLayer] = []
+        
+        for _ in 0 ..< chart.visibleValuesCount {
+            let label = CATextLayer()
+            label.font = UIFont.systemFont(ofSize: 12)
+            label.fontSize = 12
+            label.alignmentMode = .center
+            label.contentsScale = UIScreen.main.scale
+            label.foregroundColor = UIColor.black.cgColor
+            labels.append(label)
+        }
+        
+        return labels
+    }
+    
+    func updateSeriesLabel(_ seriesLabels: [CATextLayer], at index: Int, animated: Bool =  true) {
+        var x: CGFloat = chart.chartInset.left + chart.axisSize.width
+        
+        for offset in 0 ..< chart.visibleValuesCount {
+            let seriesLabel = seriesLabels[offset]
+            let point: CGPoint = CGPoint(x: x, y: getY(at: index + offset))
+            let value = chart.series.values[index + offset]
+            let targetFrame = CGRect(x: point.x - 20, y: point.y - 20, width: 40, height: 20)
+            let targetString = "\(Int(value))"
+            
+            let frameAnimation = CABasicAnimation(keyPath: "frame")
+            frameAnimation.fromValue = seriesLabel.frame
+            frameAnimation.toValue = targetFrame
+            frameAnimation.duration = chart.animateDuration
+            
+            let stringAnimation = CABasicAnimation(keyPath: "string")
+            stringAnimation.fromValue = seriesLabel.string as? String ?? targetString
+            stringAnimation.toValue = "\(Int(value))"
+            stringAnimation.duration = chart.animateDuration
+            
+            let animation = CAAnimationGroup()
+            animation.animations = [frameAnimation, stringAnimation]
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            animation.duration = chart.animateDuration
+            seriesLabel.removeAnimation(forKey: "frameAndString")
+            seriesLabel.add(animation, forKey: "frameAndString")
+            
+            seriesLabel.frame = targetFrame
+            
+            x += chart.spacing
+        }
+    }
+    
     func chartPath(at index: Int) -> CGPath {
         UIBezierPath().cgPath
     }
