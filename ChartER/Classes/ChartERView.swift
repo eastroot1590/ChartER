@@ -30,6 +30,12 @@ open class ChartERView: UIView {
             }
         }
     }
+    ///
+    open override var backgroundColor: UIColor? {
+        didSet {
+            markerLayer.strokeColor = backgroundColor?.cgColor
+        }
+    }
     
     // 데이터
     /// 이름
