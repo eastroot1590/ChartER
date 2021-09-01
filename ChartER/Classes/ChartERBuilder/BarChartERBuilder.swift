@@ -9,27 +9,21 @@ import Foundation
 
 /// 바 차트 Path를 만들 수 있는 Builder
 open class BarChartERBuilder: ChartERBuilder {
-    public init(size: CGFloat = 20) {
-        super.init()
+    override public init(visibleValuesCount: Int) {
+        super.init(visibleValuesCount: visibleValuesCount)
         
-        chartSize = size
+        seriesSize = 20
     }
     
-    override func chartPath(at index: Int) -> CGPath {
-        let chartPath = UIBezierPath()
+    override func seriesPath(in bound: CGRect) -> CGPath {
+        let barPath = UIBezierPath()
         
-        var x: CGFloat = chart.chartInset.left + chart.axisSize.width
-        
-        for offset in 0 ..< chart.visibleValuesCount {
-            let point: CGPoint = CGPoint(x: x, y: getY(at: index + offset))
-            
+        for i in 0 ..< visibleValuesCount {
             // bar
-            chartPath.move(to: CGPoint(x: point.x, y: chart.chartInset.top + chart.chartSize.height))
-            chartPath.addLine(to: point)
-            
-            x += chart.spacing
+            barPath.move(to: seriesPoints[i])
+            barPath.addLine(to: CGPoint(x: seriesPoints[i].x, y: bound.maxY - axisSize.height))
         }
         
-        return chartPath.cgPath
+        return barPath.cgPath
     }
 }

@@ -13,29 +13,17 @@ open class LineChartERBuilder: ChartERBuilder {
     
     var curveRate: CGFloat = 0
     
-    override func chartPath(at index: Int) -> CGPath {
-        let chartPath = UIBezierPath()
+    override func seriesPath(in bound: CGRect) -> CGPath {
+        let seriesPath = UIBezierPath()
         
-        var x: CGFloat = chart.chartInset.left + chart.axisSize.width
-        
-        for offset in 0 ..< chart.visibleValuesCount {
-            let point: CGPoint = CGPoint(x: x, y: getY(at: index + offset))
-            
-            // line
-            if offset == 0 {
-                chartPath.move(to: point)
+        for i in 0 ..< seriesPoints.count {
+            if i == 0 {
+                seriesPath.move(to: seriesPoints[i])
             } else {
-                // curve
-                let offset = (chart.spacing / 2) * (1 - curveRate)
-                chartPath.addCurve(to: point, controlPoint1: CGPoint(x: lastPoint.x + offset, y: lastPoint.y), controlPoint2: CGPoint(x: point.x - offset, y: point.y))
-                // line
-//                linePath.addLine(to: point)
+                seriesPath.addLine(to: seriesPoints[i])
             }
-            lastPoint = point
-            
-            x += chart.spacing
         }
         
-        return chartPath.cgPath
+        return seriesPath.cgPath
     }
 }

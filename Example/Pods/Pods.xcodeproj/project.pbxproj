@@ -243,8 +243,8 @@
 		D3F4860126DE0CDD00139FE5 /* ChartERBuilder */ = {
 			isa = PBXGroup;
 			children = (
-				D3E773E826DEFDDC00D42003 /* BarChartERBuilder.swift */,
 				D3E773E726DEFDDC00D42003 /* ChartERBuilder.swift */,
+				D3E773E826DEFDDC00D42003 /* BarChartERBuilder.swift */,
 				D3E773E926DEFDDC00D42003 /* LineChartERBuilder.swift */,
 			);
 			path = ChartERBuilder;

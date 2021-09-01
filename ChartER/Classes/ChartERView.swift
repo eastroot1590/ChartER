@@ -16,64 +16,32 @@ open class ChartERView: UIView {
     var subColor: CGColor = CGColor(red: 36/255, green: 138/255, blue: 1, alpha: 1)
     /// 축 색상
     var axisColor: CGColor = CGColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1)
-    /// 표시할 값 개수
-    var visibleValuesCount: Int = 7
-    /// 각 점들 사이의 최소 거리
-    var minimumSpacing: CGFloat = 20
-    /// 포인트 점 보기 감추기
-    public var showsMarker: Bool = true {
-        didSet {
-            if showsMarker {
-                layer.addSublayer(markerLayer)
-            } else {
-                markerLayer.removeFromSuperlayer()
-            }
-        }
-    }
-    ///
-    open override var backgroundColor: UIColor? {
-        didSet {
-            markerLayer.strokeColor = backgroundColor?.cgColor
-        }
-    }
     
     // 데이터
     /// 이름
-    var names: [String] = []
-    /// 값
-    var series: ChartERSeries = .empty {
+    open var xAxisNames: [String] = [] {
         didSet {
-            guard series.values.count > 0 else {
-                return
-            }
-            
-            self.minValue = series.values.min() ?? 0
-            self.maxValue = series.values.max() ?? 0
+            setNeedsLayout()
         }
     }
-    var minValue: Float = 0
-    var maxValue: Float = 0
-    /// 현재 가장 좌측 인덱스
+    /// 값
+    open var series: ChartERSeries = .empty {
+        didSet {
+            setNeedsLayout()
+        }
+    }
+    /// 인덱스
     var currentIndex: Int = 0
     
     // 레이아웃
-    /// 크기
-    var chartSize: CGSize {
-        let width = frame.width - chartInset.left - chartInset.right - axisSize.width
-        let height = frame.height - chartInset.top - chartInset.bottom - axisSize.height
-        
-        return CGSize(width: width, height: height)
-    }
     /// 여백
     var chartInset: UIEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-    /// 축 여백
-    var axisSize: CGSize = CGSize(width: 50, height: 50)
-    /// 애니메이션 시간
-    var animateDuration: CFTimeInterval = 2
-    /// 각 점들 사이의 거리
-    var spacing: CGFloat {
-        return max(chartSize.width / CGFloat(visibleValuesCount - 1), minimumSpacing)
+    /// 크기
+    var chartBound: CGRect {
+        CGRect(x: chartInset.left, y: chartInset.top, width: frame.width - chartInset.left - chartInset.right, height: frame.height - chartInset.top - chartInset.bottom)
     }
+    /// 애니메이션 시간
+    var animateDuration: CFTimeInterval = 0.2
     
     // 레이어
     /// 원본 차트 레이어
@@ -93,20 +61,15 @@ open class ChartERView: UIView {
     private var oldTouch: CGPoint = .zero
     
     // 유틸리티
-    public var builder: ChartERBuilder! {
+    /// 차트 Builder (default LineChartERBuilder)
+    public var builder: ChartERBuilder = LineChartERBuilder(visibleValuesCount: 7) {
         didSet {
-            oldValue?.chart = nil
-            builder?.chart = self
-            
-            seriesLayer.lineWidth = builder.chartSize
+            seriesLayer.lineWidth = builder.seriesSize
         }
     }
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        // default builder
-        builder = LineChartERBuilder()
         
         // 축
         axisLayer.fillColor = nil
@@ -117,7 +80,7 @@ open class ChartERView: UIView {
         // 차트
         seriesLayer.fillColor = nil
         seriesLayer.strokeColor = mainColor
-        seriesLayer.lineWidth = builder.chartSize
+        seriesLayer.lineWidth = builder.seriesSize
         layer.addSublayer(seriesLayer)
         
         // 점
@@ -134,32 +97,13 @@ open class ChartERView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    open override func layoutSublayers(of layer: CALayer) {
-        super.layoutSublayers(of: layer)
+    open override func layoutSubviews() {
+        super.layoutSubviews()
         
-        seriesLayer.frame = bounds
-        axisLayer.frame = bounds
-        
-        // update appearance
-        CATransaction.begin()
-        CATransaction.setAnimationDuration(animateDuration)
+        clearAxis()
+        initializeAxis()
         
         updateChart()
-        updateAxis()
-        
-        CATransaction.commit()
-    }
-    
-    open func addSets(_ series: ChartERSeries) {
-        self.series = series
-        
-        resetAxis()
-    }
-    
-    open func setName(_ names: [String]) {
-        self.names = names
-        
-        resetAxis()
     }
     
     @objc func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
@@ -170,11 +114,11 @@ open class ChartERView: UIView {
         case .changed:
             let currentTouch = recognizer.location(in: self)
             let deltaTouch = CGPoint(x: currentTouch.x - oldTouch.x, y: currentTouch.y - oldTouch.y)
-            if deltaTouch.x < -spacing {
+            if deltaTouch.x < -50 {
                 indexScrollToNext()
                 
                 oldTouch = currentTouch
-            } else if deltaTouch.x > spacing {
+            } else if deltaTouch.x > 50 {
                 indexScrollToPrev()
                 
                 oldTouch = currentTouch
@@ -191,84 +135,72 @@ open class ChartERView: UIView {
         }
         
         currentIndex -= 1
-        setNeedsLayout()
+        
+//        setNeedsLayout()
+        updateChart()
     }
     
     private func indexScrollToNext() {
-        guard currentIndex + visibleValuesCount < series.values.count else {
+        guard currentIndex + builder.visibleValuesCount < series.values.count else {
             return
         }
         
         currentIndex += 1
-        setNeedsLayout()
+        
+//        setNeedsLayout()
+        updateChart()
+    }
+    
+    private func clearAxis() {
+        xAxisLabels.forEach { $0.removeFromSuperlayer() }
+        xAxisLabels = []
+        
+        yAxisLabels.forEach { $0.removeFromSuperlayer() }
+        yAxisLabels = []
+    }
+    
+    private func initializeAxis() {
+        // axis
+        axisLayer.path = builder.axisPath(in: chartBound)
+        
+        // x axis label
+        builder.xAxisLabelPoints(in: chartBound).forEach { point in
+            let label = CATextLayer()
+            label.frame = CGRect(x: point.x - 20, y: point.y + 5, width: 40, height: 20)
+            label.foregroundColor = axisColor
+            label.fontSize = 8
+            label.contentsScale = UIScreen.main.scale
+            label.alignmentMode = .center
+            axisLayer.addSublayer(label)
+            xAxisLabels.append(label)
+        }
+        
+        // y axis label
     }
     
     private func updateChart(animated: Bool = true) {
-        let linePath = builder.chartPath(at: currentIndex)
-        let pointPath = builder.pointPath(at: currentIndex)
-        
-        if seriesLabels.isEmpty {
-            seriesLabels = builder.seriesLabels()
-            seriesLabels.forEach { self.seriesLayer.addSublayer($0) }
-        }
-        builder.updateSeriesLabel(seriesLabels, at: currentIndex, animated: animated)
-        
-        if animated {
-            let chartAnimation = CABasicAnimation(keyPath: "path")
-            chartAnimation.fromValue = seriesLayer.path ?? linePath
-            chartAnimation.toValue = linePath
-            chartAnimation.duration = animateDuration
-//            chartAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
-            seriesLayer.removeAnimation(forKey: "path")
-            seriesLayer.add(chartAnimation, forKey: "path")
-            
-            let pointAnimation = CABasicAnimation(keyPath: "path")
-            pointAnimation.fromValue = markerLayer.path ?? pointPath
-            pointAnimation.toValue = pointPath
-            pointAnimation.duration = animateDuration
-//            pointAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
-            markerLayer.removeAnimation(forKey: "path")
-            markerLayer.add(pointAnimation, forKey: "path")
-        }
-        
-        seriesLayer.path = linePath
-        markerLayer.path = pointPath
-    }
-    
-    private func resetAxis() {
-        // axis
-        axisLayer.path = builder?.axis()
+        builder.update(to: currentIndex, in: chartBound, with: series)
         
         // x axis label
-        xAxisLabels.forEach { $0.removeFromSuperlayer() }
-        xAxisLabels = builder?.xAxisLabels() ?? []
-        xAxisLabels.forEach { self.layer.addSublayer($0) }
-        
-        // y axis label
-        yAxisLabels.forEach { $0.removeFromSuperlayer() }
-        yAxisLabels = builder?.yAxisLabels() ?? []
-        yAxisLabels.forEach { self.layer.addSublayer($0) }
-    }
-    
-    private func updateAxis() {
-        for i in 0 ..< xAxisLabels.count {
-            var labelString: String
-            
-            if currentIndex + i < names.count {
-                labelString = names[currentIndex + i]
+        for visibleIndex in 0 ..< builder.visibleValuesCount {
+            if currentIndex + visibleIndex < xAxisNames.count - 1 {
+                xAxisLabels[visibleIndex].string = xAxisNames[currentIndex + visibleIndex]
             } else {
-                labelString = "\(currentIndex + i)"
+                xAxisLabels[visibleIndex].string = "\(currentIndex + visibleIndex)"
             }
-
-            // 이걸 왜 해줘야하는지 모르겠다. 안하면 updateChart 애니메이션을 씹어버린다.
-            let animation = CABasicAnimation(keyPath: "string")
-            animation.fromValue = labelString
-            animation.toValue = labelString
-            animation.duration = animateDuration
-            animation.fillMode = .forwards
-            animation.isRemovedOnCompletion = false
-            xAxisLabels[i].removeAnimation(forKey: "string")
-            xAxisLabels[i].add(animation, forKey: "string")
         }
+        
+        // series
+        let seriesPath = builder.seriesPath(in: chartBound)
+        
+        if animated {
+            let pathAnimation = CABasicAnimation(keyPath: "path")
+            pathAnimation.fromValue = seriesLayer.presentation()?.path ?? seriesPath
+            pathAnimation.toValue = seriesPath
+            pathAnimation.duration = animateDuration
+            seriesLayer.add(pathAnimation, forKey: "path")
+        }
+        
+        seriesLayer.path = seriesPath
     }
 }
