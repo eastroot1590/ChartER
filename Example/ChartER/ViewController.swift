@@ -16,7 +16,6 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         let chart = ChartERView(frame: CGRect(origin: CGPoint(x: 0, y: 100), size: CGSize(width: view.frame.width, height: 200)))
-        chart.backgroundColor = .systemGreen
 //        chart.builder = BarChartERBuilder()
         chart.builder = LineChartERBuilder()
 //        chart.showsMarker = false

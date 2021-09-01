@@ -82,7 +82,7 @@ open class ChartERBuilder {
             label.fontSize = 12
             label.alignmentMode = .center
             label.contentsScale = UIScreen.main.scale
-            label.foregroundColor = UIColor.black.cgColor
+            label.foregroundColor = chart.axisColor
             labels.append(label)
         }
         
@@ -91,6 +91,9 @@ open class ChartERBuilder {
     
     func updateSeriesLabel(_ seriesLabels: [CATextLayer], at index: Int, animated: Bool =  true) {
         var x: CGFloat = chart.chartInset.left + chart.axisSize.width
+        
+//        CATransaction.begin()
+//        CATransaction.setAnimationDuration(chart.animateDuration)
         
         for offset in 0 ..< chart.visibleValuesCount {
             let seriesLabel = seriesLabels[offset]
@@ -103,24 +106,29 @@ open class ChartERBuilder {
             frameAnimation.fromValue = seriesLabel.frame
             frameAnimation.toValue = targetFrame
             frameAnimation.duration = chart.animateDuration
+//            frameAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            seriesLabel.add(frameAnimation, forKey: "frame")
             
-            let stringAnimation = CABasicAnimation(keyPath: "string")
-            stringAnimation.fromValue = seriesLabel.string as? String ?? targetString
-            stringAnimation.toValue = "\(Int(value))"
-            stringAnimation.duration = chart.animateDuration
+//            let stringAnimation = CABasicAnimation(keyPath: "string")
+//            stringAnimation.fromValue = seriesLabel.string as? String ?? targetString
+//            stringAnimation.toValue = "\(Int(value))"
+//            stringAnimation.duration = chart.animateDuration
             
-            let animation = CAAnimationGroup()
-            animation.animations = [frameAnimation, stringAnimation]
-            animation.fillMode = .forwards
-            animation.isRemovedOnCompletion = false
-            animation.duration = chart.animateDuration
-            seriesLabel.removeAnimation(forKey: "frameAndString")
-            seriesLabel.add(animation, forKey: "frameAndString")
+//            let animation = CAAnimationGroup()
+//            animation.animations = [frameAnimation, stringAnimation]
+//            animation.fillMode = .forwards
+//            animation.isRemovedOnCompletion = false
+//            animation.duration = chart.animateDuration
+//            seriesLabel.removeAnimation(forKey: "frameAndString")
+//            seriesLabel.add(animation, forKey: "frameAndString")
             
             seriesLabel.frame = targetFrame
+            seriesLabel.string = targetString
             
             x += chart.spacing
         }
+        
+//        CATransaction.commit()
     }
     
     func chartPath(at index: Int) -> CGPath {

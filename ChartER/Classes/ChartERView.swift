@@ -69,7 +69,7 @@ open class ChartERView: UIView {
     /// 축 여백
     var axisSize: CGSize = CGSize(width: 50, height: 50)
     /// 애니메이션 시간
-    var animateDuration: CFTimeInterval = 0.2
+    var animateDuration: CFTimeInterval = 2
     /// 각 점들 사이의 거리
     var spacing: CGFloat {
         return max(chartSize.width / CGFloat(visibleValuesCount - 1), minimumSpacing)
@@ -141,8 +141,13 @@ open class ChartERView: UIView {
         axisLayer.frame = bounds
         
         // update appearance
+        CATransaction.begin()
+        CATransaction.setAnimationDuration(animateDuration)
+        
         updateChart()
         updateAxis()
+        
+        CATransaction.commit()
     }
     
     open func addSets(_ series: ChartERSeries) {
@@ -204,7 +209,7 @@ open class ChartERView: UIView {
         
         if seriesLabels.isEmpty {
             seriesLabels = builder.seriesLabels()
-            seriesLabels.forEach { self.layer.addSublayer($0) }
+            seriesLabels.forEach { self.seriesLayer.addSublayer($0) }
         }
         builder.updateSeriesLabel(seriesLabels, at: currentIndex, animated: animated)
         
@@ -213,7 +218,7 @@ open class ChartERView: UIView {
             chartAnimation.fromValue = seriesLayer.path ?? linePath
             chartAnimation.toValue = linePath
             chartAnimation.duration = animateDuration
-            chartAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+//            chartAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
             seriesLayer.removeAnimation(forKey: "path")
             seriesLayer.add(chartAnimation, forKey: "path")
             
@@ -221,7 +226,7 @@ open class ChartERView: UIView {
             pointAnimation.fromValue = markerLayer.path ?? pointPath
             pointAnimation.toValue = pointPath
             pointAnimation.duration = animateDuration
-            pointAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+//            pointAnimation.timingFunction = CAMediaTimingFunction(name: .easeOut)
             markerLayer.removeAnimation(forKey: "path")
             markerLayer.add(pointAnimation, forKey: "path")
         }

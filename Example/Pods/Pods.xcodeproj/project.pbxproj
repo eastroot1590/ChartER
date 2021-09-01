@@ -21,18 +21,18 @@
 		D338817026DCC9E700E8019F /* ChartERView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D338816026DCC8B400E8019F /* ChartERView.swift */; };
 		D338817126DCC9EA00E8019F /* ChartERSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = D338816326DCC8B400E8019F /* ChartERSeries.swift */; };
 		D338817226DCC9EB00E8019F /* ChartERSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = D338816326DCC8B400E8019F /* ChartERSeries.swift */; };
-		D3F485F626DDEE9B00139FE5 /* LineChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F485F526DDEE9B00139FE5 /* LineChartERBuilder.swift */; };
-		D3F485F726DDEE9B00139FE5 /* LineChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F485F526DDEE9B00139FE5 /* LineChartERBuilder.swift */; };
-		D3F485F826DDEE9B00139FE5 /* LineChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F485F526DDEE9B00139FE5 /* LineChartERBuilder.swift */; };
-		D3F485FA26DE06E300139FE5 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F485F926DE06E300139FE5 /* Math.swift */; };
-		D3F485FB26DE06E300139FE5 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F485F926DE06E300139FE5 /* Math.swift */; };
-		D3F485FC26DE06E300139FE5 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F485F926DE06E300139FE5 /* Math.swift */; };
-		D3F485FE26DE0C9F00139FE5 /* BarChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F485FD26DE0C9F00139FE5 /* BarChartERBuilder.swift */; };
-		D3F485FF26DE0C9F00139FE5 /* BarChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F485FD26DE0C9F00139FE5 /* BarChartERBuilder.swift */; };
-		D3F4860026DE0C9F00139FE5 /* BarChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F485FD26DE0C9F00139FE5 /* BarChartERBuilder.swift */; };
-		D3F4860326DE0CFE00139FE5 /* ChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F4860226DE0CFE00139FE5 /* ChartERBuilder.swift */; };
-		D3F4860426DE0CFE00139FE5 /* ChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F4860226DE0CFE00139FE5 /* ChartERBuilder.swift */; };
-		D3F4860526DE0CFE00139FE5 /* ChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F4860226DE0CFE00139FE5 /* ChartERBuilder.swift */; };
+		D3E773EA26DEFDDC00D42003 /* ChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773E726DEFDDC00D42003 /* ChartERBuilder.swift */; };
+		D3E773EB26DEFDDC00D42003 /* BarChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773E826DEFDDC00D42003 /* BarChartERBuilder.swift */; };
+		D3E773EC26DEFDDC00D42003 /* LineChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773E926DEFDDC00D42003 /* LineChartERBuilder.swift */; };
+		D3E773EE26DEFDE400D42003 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773ED26DEFDE400D42003 /* Math.swift */; };
+		D3E773EF26DEFE0A00D42003 /* BarChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773E826DEFDDC00D42003 /* BarChartERBuilder.swift */; };
+		D3E773F026DEFE0B00D42003 /* BarChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773E826DEFDDC00D42003 /* BarChartERBuilder.swift */; };
+		D3E773F126DEFE0F00D42003 /* ChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773E726DEFDDC00D42003 /* ChartERBuilder.swift */; };
+		D3E773F226DEFE0F00D42003 /* ChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773E726DEFDDC00D42003 /* ChartERBuilder.swift */; };
+		D3E773F326DEFE1200D42003 /* LineChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773E926DEFDDC00D42003 /* LineChartERBuilder.swift */; };
+		D3E773F426DEFE1300D42003 /* LineChartERBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773E926DEFDDC00D42003 /* LineChartERBuilder.swift */; };
+		D3E773F526DEFE1600D42003 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773ED26DEFDE400D42003 /* Math.swift */; };
+		D3E773F626DEFE1600D42003 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E773ED26DEFDE400D42003 /* Math.swift */; };
 		FAC82C272E85EC99D53906212B7C554B /* Pods-ChartER_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D284B6E36F4A4C3FBC43B3AF371CBA /* Pods-ChartER_Example-dummy.m */; };
 /* End PBXBuildFile section */
 
@@ -83,10 +83,10 @@
 		CE1BF6BDA720AA4BD208C6444A16BF28 /* ChartER-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ChartER-umbrella.h"; sourceTree = "<group>"; };
 		D338816026DCC8B400E8019F /* ChartERView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartERView.swift; path = ChartER/Classes/ChartERView.swift; sourceTree = "<group>"; };
 		D338816326DCC8B400E8019F /* ChartERSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartERSeries.swift; path = ChartER/Classes/ChartERSeries.swift; sourceTree = "<group>"; };
-		D3F485F526DDEE9B00139FE5 /* LineChartERBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartERBuilder.swift; sourceTree = "<group>"; };
-		D3F485F926DE06E300139FE5 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
-		D3F485FD26DE0C9F00139FE5 /* BarChartERBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartERBuilder.swift; sourceTree = "<group>"; };
-		D3F4860226DE0CFE00139FE5 /* ChartERBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartERBuilder.swift; sourceTree = "<group>"; };
+		D3E773E726DEFDDC00D42003 /* ChartERBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartERBuilder.swift; path = ../ChartER/Classes/ChartERBuilder/ChartERBuilder.swift; sourceTree = "<group>"; };
+		D3E773E826DEFDDC00D42003 /* BarChartERBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BarChartERBuilder.swift; path = ../ChartER/Classes/ChartERBuilder/BarChartERBuilder.swift; sourceTree = "<group>"; };
+		D3E773E926DEFDDC00D42003 /* LineChartERBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LineChartERBuilder.swift; path = ../ChartER/Classes/ChartERBuilder/LineChartERBuilder.swift; sourceTree = "<group>"; };
+		D3E773ED26DEFDE400D42003 /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Math.swift; path = ChartER/Classes/Math.swift; sourceTree = "<group>"; };
 		D92ABA299C11433646A41B561E1C971E /* Pods-ChartER_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChartER_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DEFE6C5F56137A8842EFEC99AACADC79 /* Pods_ChartER_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChartER_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E048AB3950F7CC502DDC97D0D7CB294E /* Pods-ChartER_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-ChartER_Example.modulemap"; sourceTree = "<group>"; };
@@ -177,7 +177,7 @@
 				D3F4860126DE0CDD00139FE5 /* ChartERBuilder */,
 				D338816326DCC8B400E8019F /* ChartERSeries.swift */,
 				D338816026DCC8B400E8019F /* ChartERView.swift */,
-				D3F485F926DE06E300139FE5 /* Math.swift */,
+				D3E773ED26DEFDE400D42003 /* Math.swift */,
 				7323C3626E60DC8CFE753F811485562D /* Pod */,
 				02B6F780F0F47C2A6EFE0BD893F28AD2 /* Support Files */,
 			);
@@ -243,9 +243,9 @@
 		D3F4860126DE0CDD00139FE5 /* ChartERBuilder */ = {
 			isa = PBXGroup;
 			children = (
-				D3F485F526DDEE9B00139FE5 /* LineChartERBuilder.swift */,
-				D3F485FD26DE0C9F00139FE5 /* BarChartERBuilder.swift */,
-				D3F4860226DE0CFE00139FE5 /* ChartERBuilder.swift */,
+				D3E773E826DEFDDC00D42003 /* BarChartERBuilder.swift */,
+				D3E773E726DEFDDC00D42003 /* ChartERBuilder.swift */,
+				D3E773E926DEFDDC00D42003 /* LineChartERBuilder.swift */,
 			);
 			path = ChartERBuilder;
 			sourceTree = "<group>";
@@ -407,13 +407,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3F4860526DE0CFE00139FE5 /* ChartERBuilder.swift in Sources */,
-				D3F485F826DDEE9B00139FE5 /* LineChartERBuilder.swift in Sources */,
 				D338817026DCC9E700E8019F /* ChartERView.swift in Sources */,
+				D3E773F226DEFE0F00D42003 /* ChartERBuilder.swift in Sources */,
 				2647C92DAC393CF1C6894E60063F7048 /* Pods-ChartER_Tests-dummy.m in Sources */,
-				D3F4860026DE0C9F00139FE5 /* BarChartERBuilder.swift in Sources */,
+				D3E773F626DEFE1600D42003 /* Math.swift in Sources */,
 				D338817226DCC9EB00E8019F /* ChartERSeries.swift in Sources */,
-				D3F485FC26DE06E300139FE5 /* Math.swift in Sources */,
+				D3E773F026DEFE0B00D42003 /* BarChartERBuilder.swift in Sources */,
+				D3E773F426DEFE1300D42003 /* LineChartERBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,13 +421,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3F4860426DE0CFE00139FE5 /* ChartERBuilder.swift in Sources */,
-				D3F485F726DDEE9B00139FE5 /* LineChartERBuilder.swift in Sources */,
 				D338816F26DCC9E600E8019F /* ChartERView.swift in Sources */,
+				D3E773F126DEFE0F00D42003 /* ChartERBuilder.swift in Sources */,
 				FAC82C272E85EC99D53906212B7C554B /* Pods-ChartER_Example-dummy.m in Sources */,
-				D3F485FF26DE0C9F00139FE5 /* BarChartERBuilder.swift in Sources */,
+				D3E773F526DEFE1600D42003 /* Math.swift in Sources */,
 				D338817126DCC9EA00E8019F /* ChartERSeries.swift in Sources */,
-				D3F485FB26DE06E300139FE5 /* Math.swift in Sources */,
+				D3E773EF26DEFE0A00D42003 /* BarChartERBuilder.swift in Sources */,
+				D3E773F326DEFE1200D42003 /* LineChartERBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,13 +435,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3F4860326DE0CFE00139FE5 /* ChartERBuilder.swift in Sources */,
-				D3F485F626DDEE9B00139FE5 /* LineChartERBuilder.swift in Sources */,
 				D338816426DCC8B400E8019F /* ChartERView.swift in Sources */,
 				A8E4196F386A0F0A99762924E4D2CC60 /* ChartER-dummy.m in Sources */,
-				D3F485FE26DE0C9F00139FE5 /* BarChartERBuilder.swift in Sources */,
 				D338816726DCC8B400E8019F /* ChartERSeries.swift in Sources */,
-				D3F485FA26DE06E300139FE5 /* Math.swift in Sources */,
+				D3E773EE26DEFDE400D42003 /* Math.swift in Sources */,
+				D3E773EA26DEFDDC00D42003 /* ChartERBuilder.swift in Sources */,
+				D3E773EB26DEFDDC00D42003 /* BarChartERBuilder.swift in Sources */,
+				D3E773EC26DEFDDC00D42003 /* LineChartERBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
