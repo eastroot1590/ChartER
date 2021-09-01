@@ -62,7 +62,7 @@ open class ChartERView: UIView {
     
     // 유틸리티
     /// 차트 Builder (default LineChartERBuilder)
-    public var builder: ChartERBuilder = LineChartERBuilder(visibleValuesCount: 7) {
+    public var builder: ChartERBuilder = LineChartERBuilder() {
         didSet {
             seriesLayer.lineWidth = builder.seriesSize
         }
@@ -85,7 +85,7 @@ open class ChartERView: UIView {
         
         // 점
         markerLayer.fillColor = subColor
-        markerLayer.strokeColor = backgroundColor?.cgColor
+        markerLayer.strokeColor = UIColor.white.cgColor
         markerLayer.lineWidth = 2
         layer.addSublayer(markerLayer)
         
@@ -136,18 +136,16 @@ open class ChartERView: UIView {
         
         currentIndex -= 1
         
-//        setNeedsLayout()
         updateChart()
     }
     
     private func indexScrollToNext() {
-        guard currentIndex + builder.visibleValuesCount < series.values.count else {
+        guard currentIndex + builder.xAxisLabelCount < series.values.count else {
             return
         }
         
         currentIndex += 1
         
-//        setNeedsLayout()
         updateChart()
     }
     
@@ -176,21 +174,65 @@ open class ChartERView: UIView {
         }
         
         // y axis label
+        builder.yAxisLabelInfos(in: chartBound).forEach { point in
+            let label = CATextLayer()
+            label.frame = CGRect(x: point.x - 45, y: point.y - 10, width: 40, height: 20)
+            label.foregroundColor = axisColor
+            label.fontSize = 9
+            label.contentsScale = UIScreen.main.scale
+            label.alignmentMode = .right
+            axisLayer.addSublayer(label)
+            yAxisLabels.append(label)
+        }
     }
     
     private func updateChart(animated: Bool = true) {
+        print("update chart")
+        
         builder.update(to: currentIndex, in: chartBound, with: series)
         
-        // x axis label
-        for visibleIndex in 0 ..< builder.visibleValuesCount {
+        updateXAxisLabel()
+        updateYAxisLabel()
+        updateSeries(animated: animated)
+        
+        // marker
+        let markerPath = builder.markerPath()
+        
+        if animated {
+            let pathAnimation = CABasicAnimation(keyPath: "path")
+            pathAnimation.fromValue = markerLayer.presentation()?.path ?? markerPath
+            pathAnimation.toValue = markerPath
+            pathAnimation.duration = animateDuration
+            markerLayer.add(pathAnimation, forKey: "path")
+        }
+        
+        markerLayer.path = markerPath
+    }
+    
+    private func updateXAxisLabel() {
+        for visibleIndex in 0 ..< xAxisLabels.count {
             if currentIndex + visibleIndex < xAxisNames.count - 1 {
                 xAxisLabels[visibleIndex].string = xAxisNames[currentIndex + visibleIndex]
             } else {
                 xAxisLabels[visibleIndex].string = "\(currentIndex + visibleIndex)"
             }
         }
+    }
+    
+    private func updateYAxisLabel() {
+        guard let min = series.values.min(),
+              let max = series.values.max() else {
+            return
+        }
         
-        // series
+        for visibleIndex in 0 ..< yAxisLabels.count {
+            let alpha = Float(visibleIndex) / Float(yAxisLabels.count - 1)
+            let value = lerp(min, max, 1 - alpha)
+            yAxisLabels[visibleIndex].string = "\(Int(value))"
+        }
+    }
+    
+    private func updateSeries(animated: Bool) {
         let seriesPath = builder.seriesPath(in: chartBound)
         
         if animated {
