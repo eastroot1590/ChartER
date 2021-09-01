@@ -16,8 +16,8 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         let chart = ChartERView(frame: CGRect(origin: CGPoint(x: 0, y: 100), size: CGSize(width: view.frame.width, height: 200)))
-//        chart.builder = LineChartERBuilder()
-        chart.builder = BarChartERBuilder(xAxisLabelCount: 5)
+        chart.builder = LineChartERBuilder()
+//        chart.builder = BarChartERBuilder(xAxisLabelCount: 5)
         chart.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
         chart.series = ChartERSeries(name: "hello", values: [13, 5, 7, 2, -4, 15, -21, -21, -21, 1, 5, 17])
         chart.xAxisNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월"]

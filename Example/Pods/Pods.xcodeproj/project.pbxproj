@@ -83,9 +83,9 @@
 		CE1BF6BDA720AA4BD208C6444A16BF28 /* ChartER-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ChartER-umbrella.h"; sourceTree = "<group>"; };
 		D338816026DCC8B400E8019F /* ChartERView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartERView.swift; path = ChartER/Classes/ChartERView.swift; sourceTree = "<group>"; };
 		D338816326DCC8B400E8019F /* ChartERSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartERSeries.swift; path = ChartER/Classes/ChartERSeries.swift; sourceTree = "<group>"; };
-		D3E773E726DEFDDC00D42003 /* ChartERBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartERBuilder.swift; path = ../ChartER/Classes/ChartERBuilder/ChartERBuilder.swift; sourceTree = "<group>"; };
-		D3E773E826DEFDDC00D42003 /* BarChartERBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BarChartERBuilder.swift; path = ../ChartER/Classes/ChartERBuilder/BarChartERBuilder.swift; sourceTree = "<group>"; };
-		D3E773E926DEFDDC00D42003 /* LineChartERBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LineChartERBuilder.swift; path = ../ChartER/Classes/ChartERBuilder/LineChartERBuilder.swift; sourceTree = "<group>"; };
+		D3E773E726DEFDDC00D42003 /* ChartERBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartERBuilder.swift; sourceTree = "<group>"; };
+		D3E773E826DEFDDC00D42003 /* BarChartERBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarChartERBuilder.swift; sourceTree = "<group>"; };
+		D3E773E926DEFDDC00D42003 /* LineChartERBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineChartERBuilder.swift; sourceTree = "<group>"; };
 		D3E773ED26DEFDE400D42003 /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Math.swift; path = ChartER/Classes/Math.swift; sourceTree = "<group>"; };
 		D92ABA299C11433646A41B561E1C971E /* Pods-ChartER_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ChartER_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DEFE6C5F56137A8842EFEC99AACADC79 /* Pods_ChartER_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChartER_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -247,7 +247,8 @@
 				D3E773E826DEFDDC00D42003 /* BarChartERBuilder.swift */,
 				D3E773E926DEFDDC00D42003 /* LineChartERBuilder.swift */,
 			);
-			path = ChartERBuilder;
+			name = ChartERBuilder;
+			path = ChartER/Classes/ChartERBuilder;
 			sourceTree = "<group>";
 		};
 		DE91774AD2011B81AF7F154C8D31B290 /* Development Pods */ = {
