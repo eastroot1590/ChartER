@@ -18,7 +18,7 @@ open class ChartERBuilder {
     /// series 크기
     var seriesSize: CGFloat = 2
     /// series 여백
-    var seriesInset: UIEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    var seriesInset: UIEdgeInsets = UIEdgeInsets(top: 40, left: 10, bottom: 10, right: 10)
     
     /// series 좌표
     var seriesPoints: [CGPoint] = []
@@ -80,7 +80,7 @@ open class ChartERBuilder {
         return points
     }
     
-    func yAxisLabelInfos(in bound: CGRect) -> [CGPoint] {
+    func yAxisLabelPoints(in bound: CGRect) -> [CGPoint] {
         var points: [CGPoint] = []
         
         let minY = bound.minY + seriesInset.top
@@ -94,6 +94,30 @@ open class ChartERBuilder {
         }
         
         return points
+    }
+    
+    func initialSeriesPath(in bound: CGRect) -> CGPath {
+        let seriesPath = UIBezierPath()
+        
+        var points: [CGPoint] = []
+        let spacing = (bound.width - axisSize.width - seriesInset.left - seriesInset.right) / CGFloat(xAxisLabelCount - 1)
+        var x: CGFloat = bound.minX + axisSize.width + seriesInset.left
+        
+        for i in 0 ..< xAxisLabelCount {
+            let point = CGPoint(x: x, y: bound.maxY - axisSize.height - seriesInset.bottom)
+            
+            if i == 0 {
+                seriesPath.move(to: point)
+            } else {
+                seriesPath.addLine(to: point)
+            }
+            
+            points.append(point)
+            x += spacing
+        }
+        
+        seriesPoints = points
+        return seriesPath.cgPath
     }
     
     func seriesPath(in bound: CGRect) -> CGPath {

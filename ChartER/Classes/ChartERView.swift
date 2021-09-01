@@ -37,7 +37,7 @@ open class ChartERView: UIView {
     /// 여백
     var chartInset: UIEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     /// 크기
-    var chartBound: CGRect {
+    var chartFrame: CGRect {
         CGRect(x: chartInset.left, y: chartInset.top, width: frame.width - chartInset.left - chartInset.right, height: frame.height - chartInset.top - chartInset.bottom)
     }
     /// 애니메이션 시간
@@ -83,7 +83,7 @@ open class ChartERView: UIView {
         seriesLayer.lineWidth = builder.seriesSize
         layer.addSublayer(seriesLayer)
         
-        // 점
+        // 마커
         markerLayer.fillColor = subColor
         markerLayer.strokeColor = UIColor.white.cgColor
         markerLayer.lineWidth = 2
@@ -102,6 +102,9 @@ open class ChartERView: UIView {
         
         clearAxis()
         initializeAxis()
+        
+        // clearSeries() ???
+        initializeSeries()
         
         updateChart()
     }
@@ -159,14 +162,14 @@ open class ChartERView: UIView {
     
     private func initializeAxis() {
         // axis
-        axisLayer.path = builder.axisPath(in: chartBound)
+        axisLayer.path = builder.axisPath(in: chartFrame)
         
         // x axis label
-        builder.xAxisLabelPoints(in: chartBound).forEach { point in
+        builder.xAxisLabelPoints(in: chartFrame).forEach { point in
             let label = CATextLayer()
             label.frame = CGRect(x: point.x - 20, y: point.y + 5, width: 40, height: 20)
             label.foregroundColor = axisColor
-            label.fontSize = 8
+            label.fontSize = 10
             label.contentsScale = UIScreen.main.scale
             label.alignmentMode = .center
             axisLayer.addSublayer(label)
@@ -174,11 +177,11 @@ open class ChartERView: UIView {
         }
         
         // y axis label
-        builder.yAxisLabelInfos(in: chartBound).forEach { point in
+        builder.yAxisLabelPoints(in: chartFrame).forEach { point in
             let label = CATextLayer()
             label.frame = CGRect(x: point.x - 45, y: point.y - 10, width: 40, height: 20)
             label.foregroundColor = axisColor
-            label.fontSize = 9
+            label.fontSize = 10
             label.contentsScale = UIScreen.main.scale
             label.alignmentMode = .right
             axisLayer.addSublayer(label)
@@ -186,10 +189,23 @@ open class ChartERView: UIView {
         }
     }
     
-    private func updateChart(animated: Bool = true) {
-        print("update chart")
+    private func initializeSeries() {
+        seriesLayer.path = builder.initialSeriesPath(in: chartFrame)
         
-        builder.update(to: currentIndex, in: chartBound, with: series)
+        builder.seriesPoints.forEach { point in
+            let label = CATextLayer()
+            label.frame = CGRect(x: point.x - 20, y: point.y - min(builder.seriesInset.top, 25), width: 40, height: 20)
+            label.foregroundColor = axisColor
+            label.fontSize = 10
+            label.contentsScale = UIScreen.main.scale
+            label.alignmentMode = .center
+            seriesLabels.append(label)
+            seriesLayer.addSublayer(label)
+        }
+    }
+    
+    private func updateChart(animated: Bool = true) {
+        builder.update(to: currentIndex, in: chartFrame, with: series)
         
         updateXAxisLabel()
         updateYAxisLabel()
@@ -233,7 +249,7 @@ open class ChartERView: UIView {
     }
     
     private func updateSeries(animated: Bool) {
-        let seriesPath = builder.seriesPath(in: chartBound)
+        let seriesPath = builder.seriesPath(in: chartFrame)
         
         if animated {
             let pathAnimation = CABasicAnimation(keyPath: "path")
@@ -244,5 +260,23 @@ open class ChartERView: UIView {
         }
         
         seriesLayer.path = seriesPath
+        
+        var index: Int = 0
+        builder.seriesPoints.forEach { point in
+            let targetFrame = CGRect(x: point.x - 20, y: point.y - min(builder.seriesInset.top, 25), width: 40, height: 20)
+            
+            if animated {
+                let frameAnimation = CABasicAnimation(keyPath: "frame")
+                frameAnimation.fromValue = seriesLabels[index].frame
+                frameAnimation.toValue = targetFrame
+                frameAnimation.duration = animateDuration
+                seriesLabels[index].add(frameAnimation, forKey: "frame")
+            }
+            
+            seriesLabels[index].string = "\(series.values[currentIndex + index])"
+            seriesLabels[index].frame = targetFrame
+            
+            index += 1
+        }
     }
 }
